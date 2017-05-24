@@ -200,6 +200,7 @@ namespace GreyhoundRace
 
                 // Start the timer for the race
                 timer1.Enabled = true;
+                btnRace.Enabled = false; // Disable the race button
             }
 
         }
@@ -230,12 +231,13 @@ namespace GreyhoundRace
                         ResetBetAmount(); // Reset bet amounts if bettor is bust
                         BettorBroke(); // Checks to see if anyone is bust and blank them out
                         GameOverCheck(); // Checks to see if the game is over and close if true
-                        btnRace.Enabled = false; // Disable the race button
+
                         break;
 
                     }
 
                 }
+
             }
 
             catch
@@ -245,9 +247,36 @@ namespace GreyhoundRace
 
         }
 
-        public void btnLockIn_Click(object sender, EventArgs e) // Unlock the Race Button
+        public void btnLockIn_Click(object sender, EventArgs e) // Unlock the Race Button and check bet amount is not more than cash
         {
-            btnRace.Enabled = true;
+            try
+            {
+                if (myPunters[0].Cash < myPunters[0].myBet.Amount)
+                {
+                    MessageBox.Show("Joe does not have enough to proceed");
+                    btnRace.Enabled = false;
+                }
+                if (myPunters[1].Cash < myPunters[1].myBet.Amount)
+                {
+                    MessageBox.Show("McGee does not have enough to proceed");
+                    btnRace.Enabled = false;
+                }
+                if (myPunters[2].Cash < myPunters[2].myBet.Amount)
+                {
+                    MessageBox.Show("George does not have enough to proceed");
+                    btnRace.Enabled = false;
+                }
+                else
+                {
+                    btnRace.Enabled = true;
+                }
+            }
+
+            catch
+            {
+                MessageBox.Show("Please place all bets");
+            }
+
         }
     }
 
