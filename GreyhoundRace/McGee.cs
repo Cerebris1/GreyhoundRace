@@ -6,13 +6,12 @@ using System.Threading.Tasks;
 
 namespace GreyhoundRace
 {
-    public class McGee : Punter
+    public class McGee : Punter // Inherit from the Punter class
     {
-        public McGee()
+        public McGee() // Sets up the punter McGee
         {
             Name = "Eye Patch McGee";
             Cash = 50;
-
         }
     }
 }

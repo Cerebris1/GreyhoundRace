@@ -8,7 +8,7 @@ namespace GreyhoundRace
 {
     public class Factory
     {
-        // Decides which punter class to instantiate
+        // Decides which class to instantiate
         public static Punter GetAPunter(int id)
         {
             switch (id)

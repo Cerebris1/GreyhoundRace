@@ -24,7 +24,6 @@ namespace GreyhoundRace
         {
             //Place a new bet and store it
             //return true if punter had enough money to bet
-            //return false if punter did not have enough money and do not store
             if (Cash >= BetAmount)
             {
                 myBet = new Bet()
@@ -38,6 +37,7 @@ namespace GreyhoundRace
 
                 return true;
             }
+            //return false if punter did not have enough money and do not store
             else
             {
                 MessageBox.Show(Name + " didn't have enough to bet");

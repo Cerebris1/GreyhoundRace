@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace GreyhoundRace
 {
-    public class George : Punter
+    public class George : Punter // Inherit from the Punter class
     {
-        public George()
+        public George() // Sets up the Punter George
         {
             Name = "Pokerface George";
             Cash = 50;

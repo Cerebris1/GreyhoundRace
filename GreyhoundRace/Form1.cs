@@ -127,7 +127,7 @@ namespace GreyhoundRace
                 punter = 2;
             }
 
-            myPunters[punter].PlaceBet((int)udBoxBet.Value, (int)udBoxDog.Value - 1); // Updates the bet amount and tortoise # using the Placebet.Punter class
+            myPunters[punter].PlaceBet((int)udBoxBet.Value, (int)udBoxDog.Value - 1); // Updates the bet amount and tortoise # using the Placebet.Punter class with Form designer details
 
         }
 
@@ -202,7 +202,7 @@ namespace GreyhoundRace
         }
 
         private void timer1_Tick(object sender, EventArgs e)
-        { //Run the timer event for the race and return the winner and bet results
+        { // Run the timer event for the race and return the winner and bet results
             // If no bet is placed then return warning message and try again
             try
             {

@@ -10,7 +10,7 @@ namespace UnitTestProject1
         Punter newPunter = new Joe();
 
         [TestMethod]
-        public void TestInstantiation()
+        public void TestInstantiation() // Tests to make sure the Instantiation has worked by making sure the cash amounts are correct
         {
             int ExpectedCash = 50;
             int ActualCash = newPunter.Cash;
