@@ -1,0 +1,252 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace GreyhoundRace
+{
+    public partial class Form1 : Form
+    {
+        // Initialise an array of punters
+        Punter[] myPunters = new Punter[3];
+        // Initialise an array of Tortoises
+        Tortoises[] TortoisesArray = new Tortoises[4];
+
+        public Form1()
+        {
+            InitializeComponent();
+            TortoisesRace();
+            Punters();
+            LabelsClear();
+        }
+
+        public void LabelsClear() // Clear all labels
+        {
+            lblJoe.Text = "";
+            lblGeorge.Text = "";
+            lblMcGee.Text = "";
+        }
+
+        public void Punters()
+        {
+            //create an array of punters and instantiate factory class
+            for (int i = 0; i < 3; i++)
+            {
+                myPunters[i] = Factory.GetAPunter(i);
+            }
+
+            //set the labels to the classes and update
+            myPunters[0].MyLabel = lblJoe;
+            myPunters[0].MyRadioButton = rbJoe;
+            myPunters[0].MyRadioButton.Text = myPunters[0].Name + " has $" + myPunters[0].Cash;
+            myPunters[1].MyLabel = lblMcGee;
+            myPunters[1].MyRadioButton = rbMcGee;
+            myPunters[1].MyRadioButton.Text = myPunters[1].Name + " has $" + myPunters[1].Cash;
+            myPunters[2].MyLabel = lblGeorge;
+            myPunters[2].MyRadioButton = rbGeorge;
+            myPunters[2].MyRadioButton.Text = myPunters[2].Name + " has $" + myPunters[2].Cash;
+
+        }
+
+        public void GameOverCheck() // Checks to see if the game is over and close game
+        {
+            if (myPunters[0].Cash <= 0 && myPunters[1].Cash <= 0 && myPunters[2].Cash <= 0)
+            {
+                MessageBox.Show("Congratulations, all of your bettors are broke! Try Again :D");
+                LabelsClear();
+                ResetRace();
+                this.Close();
+            }
+
+        }
+
+        public void BettorBroke() // Checks to see if anyone is broke and cannot continue and update label and blank out radio button
+        {
+            if (myPunters[0].Cash <= 0)//Joe
+            {
+                lblJoe.Text = "Joe is now broke and cannot continue betting";
+                rbJoe.Enabled = false;
+            }
+            if (myPunters[1].Cash <= 0)//McGee
+            {
+                lblMcGee.Text = "McGee is now broke and cannot continue betting";
+                rbMcGee.Enabled = false;
+            }
+            if (myPunters[2].Cash <= 0)//George
+            {
+                lblGeorge.Text = "George is now broke and cannot continue betting";
+                rbGeorge.Enabled = false;
+            }
+
+        }
+
+        public void ResetBetAmount() // Reset the bet amounts to zero if the punter is busted
+        {
+            if (myPunters[0].Cash == 0)
+            {
+                myPunters[0].myBet.Amount = 0;
+            }
+            if (myPunters[1].Cash == 0)
+            {
+                myPunters[1].myBet.Amount = 0;
+            }
+            if (myPunters[2].Cash == 0)
+            {
+                myPunters[2].myBet.Amount = 0;
+            }
+        }
+
+        public void TortoisesRace() // Instantiate the Tortoises
+        {
+            TortoisesArray[0] = new Tortoises { MyPictureBox = pbTortoise1, StartingPosition = pbTortoise1.Left, TortoiseName = "#1", RaceTrackLength = pbRaceTrack.Width - pbTortoise1.Width, Randomiser = new Random() };
+            TortoisesArray[1] = new Tortoises { MyPictureBox = pbTortoise2, StartingPosition = pbTortoise2.Left, TortoiseName = "#2", RaceTrackLength = pbRaceTrack.Width - pbTortoise2.Width, Randomiser = TortoisesArray[0].Randomiser };
+            TortoisesArray[2] = new Tortoises { MyPictureBox = pbTortoise3, StartingPosition = pbTortoise3.Left, TortoiseName = "#3", RaceTrackLength = pbRaceTrack.Width - pbTortoise3.Width, Randomiser = TortoisesArray[0].Randomiser };
+            TortoisesArray[3] = new Tortoises { MyPictureBox = pbTortoise4, StartingPosition = pbTortoise4.Left, TortoiseName = "#4", RaceTrackLength = pbRaceTrack.Width - pbTortoise4.Width, Randomiser = TortoisesArray[0].Randomiser };
+        }
+
+        private void btnBet_Click(object sender, EventArgs e) // Place the selected bet
+        {
+            int punter = 0;
+
+            if (rbJoe.Checked)
+            {
+                punter = 0;
+            }
+            else if (rbMcGee.Checked)
+            {
+                punter = 1;
+            }
+            else if (rbGeorge.Checked)
+            {
+                punter = 2;
+            }
+
+            myPunters[punter].PlaceBet((int)udBoxBet.Value, (int)udBoxDog.Value - 1); // Updates the bet amount and tortoise # using the Placebet.Punter class
+
+        }
+
+        private void rbJoe_CheckedChanged(object sender, EventArgs e)
+        {
+            //Show that Joe is betting in the bettor label
+            lblBettor.Text = myPunters[0].Name;
+            // Sets the maximum bet based off cash
+            udBoxBet.Maximum = myPunters[0].Cash;
+        }
+
+        private void rbMcGee_CheckedChanged(object sender, EventArgs e)
+        {
+            //Show that McGee is betting in the bettor label
+            lblBettor.Text = myPunters[1].Name;
+            // Sets the maximum bet based off cash
+            udBoxBet.Maximum = myPunters[1].Cash;
+        }
+
+        private void rbGeorge_CheckedChanged(object sender, EventArgs e)
+        {
+            //Show that George is betting in the bettor label
+            lblBettor.Text = myPunters[2].Name;
+            // Sets the maximum bet based off cash
+            udBoxBet.Maximum = myPunters[2].Cash;
+        }
+
+        public void ResetRace() // Reset tortoise positions back to start
+        {
+            // Reset the label text
+            myPunters[0].MyLabel.ResetText();
+            myPunters[1].MyLabel.ResetText();
+            myPunters[2].MyLabel.ResetText();
+            //Reset the bet amounts to zero
+            myPunters[0].myBet.Amount = 0;
+            myPunters[1].myBet.Amount = 0;
+            myPunters[2].myBet.Amount = 0;
+
+            foreach (Tortoises t in TortoisesArray)
+            {
+                t.MyPictureBox.Left = t.StartingPosition;
+            }
+        }
+
+        private void btnRace_Click(object sender, EventArgs e)
+        {
+            //Check to see if the punters have enough money to proceed with the race and provide warning if not
+            if (myPunters[0].Cash < udBoxBet.Value && rbJoe.Enabled)
+            {
+                MessageBox.Show("Sorry but Joe does not have enough cash to proceed.");
+            }
+            if (myPunters[1].Cash < udBoxBet.Value && rbMcGee.Enabled)
+            {
+                MessageBox.Show("Sorry but McGee does not have enough cash to proceed.");
+            }
+            if (myPunters[2].Cash < udBoxBet.Value && rbGeorge.Enabled)
+            {
+                MessageBox.Show("Sorry but George does not have enough cash to proceed.");
+            }
+            else
+            {
+                //Reset starting positions
+                foreach (Tortoises t in TortoisesArray)
+                {
+                    t.MyPictureBox.Left = t.StartingPosition;
+                }
+
+                // Start the timer for the race
+                timer1.Enabled = true;
+            }
+
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        { //Run the timer event for the race and return the winner and bet results
+            // If no bet is placed then return warning message and try again
+            try
+            {
+                int winner;
+
+                for (int i = 0; i < TortoisesArray.Length; i++)
+                {
+                    if (TortoisesArray[i].Run(pbRaceTrack)) // use Tortoise.Run class for race and if true return a winner and stop timer event
+                    {
+                        winner = i;
+                        timer1.Enabled = false;
+                        MessageBox.Show("Tortoise #" + (winner + 1) + " Wins!");
+
+                        for (int j = 0; j < myPunters.Length; j++)
+                        {
+                            if (myPunters[j].myBet.PayOut(winner) != 0) // if punters payout is not 0
+                                myPunters[j].Cash += myPunters[j].myBet.PayOut(winner); // Update punters cash with the bet payout amount
+                            myPunters[j].MyRadioButton.Text = myPunters[j].Name + " has $" + myPunters[j].Cash; // Updates the radio button text with new cash value
+                        }
+
+                        ResetRace(); // Resets the starting positions, bet amounts, and labels
+                        ResetBetAmount(); // Reset bet amounts if bettor is bust
+                        BettorBroke(); // Checks to see if anyone is bust and blank them out
+                        GameOverCheck(); // Checks to see if the game is over and close if true
+                        btnRace.Enabled = false; // Disable the race button
+                        break;
+
+                    }
+
+                }
+            }
+
+            catch
+            {
+                MessageBox.Show("A bet was not placed, you could have won some coin.");
+            }
+
+        }
+
+        public void btnLockIn_Click(object sender, EventArgs e) // Unlock the Race Button
+        {
+            btnRace.Enabled = true;
+        }
+    }
+
+}
+
