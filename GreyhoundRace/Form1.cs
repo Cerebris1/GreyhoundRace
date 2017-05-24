@@ -178,14 +178,17 @@ namespace GreyhoundRace
             if (myPunters[0].Cash < udBoxBet.Value && rbJoe.Enabled)
             {
                 MessageBox.Show("Sorry but Joe does not have enough cash to proceed.");
+                timer1.Enabled = false;
             }
             if (myPunters[1].Cash < udBoxBet.Value && rbMcGee.Enabled)
             {
                 MessageBox.Show("Sorry but McGee does not have enough cash to proceed.");
+                timer1.Enabled = false;
             }
             if (myPunters[2].Cash < udBoxBet.Value && rbGeorge.Enabled)
             {
                 MessageBox.Show("Sorry but George does not have enough cash to proceed.");
+                timer1.Enabled = false;
             }
             else
             {
